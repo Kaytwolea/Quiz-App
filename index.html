@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Practice</title>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap');
+            *{
+                box-sizing: border-box;
+            }
+            body {
+                background-image: linear-gradient(rgb(6, 6, 83), white);
+                font-family: 'Times New Roman', Times, serif;
+                overflow: hidden;
+                display: flex;
+                margin: 0;
+                padding: 0;
+                line-height: 1;
+                font-size: medium;
+                height: 100vh;
+            }
+            .container {
+                margin: 100px auto;
+                background-color: transparent;
+                height: auto;
+                width: 600px;
+                min-height: 100px;
+                display: block;
+                box-shadow: 0 0 10px 2px rgba(100, 100, 100, 0.1);
+                border: 10px;
+                border-color: black;
+            }
+            .root {
+                background-color: rgb(6, 6, 83);
+                align-content: center;
+                align-items: center;
+                overflow: hidden;
+                float: none;
+                width: 100%;
+            }
+            .root h2 {
+                font-size: 50px;
+                text-align: center;
+                font-family: Georgia, 'Times New Roman', Times, serif;
+                color: whitesmoke;
+                text-transform: capitalize;
+                font-style: inherit;
+            }
+            .quiz-space {
+                background-color: inherit;
+                overflow: hidden;
+            }
+            .quiz-header {
+                color: black;
+            }
+            ul{
+                list-style-type: none;
+                padding: 0;
+            }
+            ul li{
+                font-size: 1.2rem;
+                margin: 1rem 0;
+            }
+            ul li label{
+                cursor: pointer;
+            }
+            button {
+                background-color: rgb(6, 6, 83);
+                color: white;
+                width: 100%;
+                font-size: 1.5rem;
+                font-family: inherit;
+                border: none;
+                display: block;
+                cursor: cell;
+                padding: 1.5rem;
+            }
+            button:hover{
+                 background-color: rgb(3, 3, 34);
+            }
+            button:focus{
+                outline: none;
+                background-color: black;
+            }           
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="root">
+               <h2>Take a Quiz</h2>  
+            </div>
+            <div class="quiz-space" id="quiz">
+                <div class="quiz-header">
+                    <h2 id="question">Question Test</h2>
+                    <ul>
+                        <li>
+                            <input type="radio" name="answer" id="a" class="answer">
+                            <label for="a" id="a_text">Answer</label>
+                        </li>
+                        <li>
+                            <input type="radio" name="answer" id="b" class="answer">
+                            <label for="b" id="b_text">Answer</label>
+                        </li>
+                        <li>
+                            <input type="radio" name="answer" id="c" class="answer">
+                            <label for="c" id="c_text">Answer</label>
+                        </li>
+                        <li>
+                            <input type="radio" name="answer" id="d" class="answer">
+                            <label for="d" id="d_text">Answer</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- <button id="previous-question">Previous Question</button> -->
+            <button id="submit">Submit</button>
+        </div>
+    </body>
+    <script>
+const quizData = [
+    {
+        question: "Who is the President of Nigeria ?",
+        a: "AremoGucci",
+        b: "Temiloluwa Kolapo Paul",
+        c: "Buhari M.",
+        d: "Kaytwolea",
+        correct: "c"
+    },
+    {
+        question: "What is the name of Capital of Nigeria",
+        a: "Oyo State",
+        b: "Lagos State",
+        c: "Kano State",
+        d: "Abuja",
+        correct: "d",
+    },
+    {
+        question: "Who is the captain of Manchester United",
+        a: "C.Ronaldo",
+        b: "Maguire",
+        c: "Juan Mata",
+        d: "Fernandes",
+        correct: "b",
+    },
+    {
+        question: "Who is the best player in the world",
+        a: "Paul Pogba",
+        b: "Lionel Messi",
+        c: "Cristiano Ronaldo",
+        d: "Luka Modric",
+        correct: "b",
+    },
+
+
+];
+
+const quiz= document.getElementById('quiz')
+const answerEls = document.querySelectorAll('.answer')
+const questionEl = document.getElementById('question')
+const a_text = document.getElementById('a_text')
+const b_text = document.getElementById('b_text')
+const c_text = document.getElementById('c_text')
+const d_text = document.getElementById('d_text')
+const submitBtn = document.getElementById('submit')
+
+
+let currentQuiz = 0
+let score = 0
+
+
+loadQuiz()
+
+function loadQuiz() {
+
+ deselectAnswers()
+
+ const currentQuizData = quizData[currentQuiz]
+
+ questionEl.innerText =currentQuizData.question
+ a_text.innerText = currentQuizData.a
+ b_text.innerText = currentQuizData.b
+ c_text.innerText = currentQuizData.c
+ d_text.innerText = currentQuizData.d
+}
+
+function deselectAnswers() {
+ answerEls.forEach(answerEl => answerEl.checked = false)
+}
+
+function getSelected() {
+ let answer
+ answerEls.forEach(answerEl => {
+     if(answerEl.checked) {
+         answer = answerEl.id
+     }
+ })
+ return answer
+}
+
+
+submitBtn.addEventListener('click', () => {
+ const answer = getSelected()
+ if(answer) {
+    if(answer === quizData[currentQuiz].correct) {
+        score++
+    }
+
+    currentQuiz++
+
+    if(currentQuiz < quizData.length) {
+        loadQuiz()
+    } else {
+        quiz.innerHTML = `
+        <h2>You answered ${score}/${quizData.length} questions correctly</h2>
+
+        <button onclick="location.reload()">Reload</button>
+        `
+    }
+ }
+})
+     </script>
+</html>
